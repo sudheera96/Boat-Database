@@ -1,6 +1,14 @@
 # Boat-Database
 Project on boat database using SQL with detail business rules, EER and normalization
 
+## Used Skills
+
+![](https://img.shields.io/badge/Client%20Program-MySQL%20Workbench-informational?style=flat&logo=mysql&logoColor=white&color=2bbc8a)
+
+![](https://img.shields.io/badge/Server-MySQL%20Server-informational?style=flat&logo=mysql&logoColor=white&color=2bbc8a)
+
+
+
 <img src="https://vizboat.com/wp-content/themes/yootheme/cache/440RS-chrome-black-361f94fb.jpeg" align="right"
      alt="Size Limit logo by Anton Lovchikov" width="500" height="300">
 
@@ -19,3 +27,19 @@ Each and every OWNER with composite attributes like Name (FName, LName), Address
 
 
 An OWNER may or may not be one of subtypes like CORPORATION, PERSON, LOCAL BUSINESS. On the other hand, an OWNER may be any two (or even three) of these subtypes at the same time. LOCAL BUSINESS attributes similar to its super type OWNER but CORPORATION and PERSON subtypes differ by Company ID and Ssn attributes respectively.
+
+## Boat database EER diagaram 
+
+[EER Diagram](https://github.com/sudheera96/Boat-Database/blob/main/ChitipoluS_EER.pdf)
+
+## Boat database Normalization
+
+[Normalization](https://github.com/sudheera96/Boat-Database/blob/main/ChitipoluS_Normalization.pdf)
+
+## Boat database SQL
+
+[Boat database SQL Programming](https://github.com/sudheera96/Boat-Database/blob/main/ChitipoluS_SQL.txt)
+
+
+
+
