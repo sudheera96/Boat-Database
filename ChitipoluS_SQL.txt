@@ -1,0 +1,189 @@
+-- SQL Final Exam
+-- Sri Sudheera Chitipolu
+
+--# creating database
+CREATE DATABASE Boats;
+USE Boats
+
+--#1 creating TABLE BOAT and inserting values
+
+create table BOAT(RegisterNumber INTEGER NOT NULL AUTO_INCREMENT,
+sizen VARCHAR(225),
+Boat_type CHAR(1) CHECK (Boat_type IN ('Y', 'C')),
+CONSTRAINT Boat_PK PRIMARY KEY(RegisterNumber));
+
+INSERT INTO BOAT(sizen,Boat_Type)
+ VALUES ('small','Y'),
+        ('Extra Small','C'),
+        ('ExtraLarge','C'),
+        ('Extra extra large','C'),
+        ('very small','Y'),
+        ('medium','Y');
+
+--#2 creating TABLE YACHT_BOAT and inserting values
+
+create table YACHT_BOAT(YRegisterNumber INTEGER NOT NULL,
+Length INTEGER,
+Height INTEGER,
+CONSTRAINT YACHT_BOAT_PK PRIMARY KEY(YRegisterNumber),
+CONSTRAINT YACHT_BOAT_FK FOREIGN KEY(YRegisterNumber) REFERENCES BOAT(RegisterNumber));
+
+INSERT INTO YACHT_BOAT(YRegisterNumber,Length,Height)
+ VALUES (1,20,30),
+        (5,40,60),
+        (6,70,80);
+
+--#3 creating TABLE HARBOUR and inserting values
+
+create table HARBOUR(Number INTEGER NOT NULL,
+Location VARCHAR(225),
+YRegisterNumber INTEGER,
+CONSTRAINT HARBOUR_PK PRIMARY KEY(Number),
+CONSTRAINT HARBOUR_FK FOREIGN KEY(YRegisterNumber) REFERENCES YACHT_BOAT(YRegisterNumber));
+
+INSERT INTO HARBOUR(Number,Location,YRegisterNumber)
+ VALUES (123,'delhi',1),
+        (136,'finland',6),
+        (140,'michigan',5);
+
+--#4 creating TABLE CRUISE_BOAT and inserting values
+
+create table CRUISE_BOAT(CRegisterNumber INTEGER NOT NULL,
+EngineID CHAR(3),
+CONSTRAINT CRUISE_BOAT_PK PRIMARY KEY(CRegisterNumber),
+CONSTRAINT CRUISE_BOAT_FK FOREIGN KEY(CRegisterNumber) REFERENCES BOAT(RegisterNumber));
+
+INSERT INTO CRUISE_BOAT(CRegisterNumber,EngineID)
+ VALUES (2,'#2S'),
+        (4,'#4Z'),
+        (3,'#qw');
+
+--#5 creating TABLE CRUISE SERVICES and inserting values
+
+create table CRUISE_SERVICES(Date datetime default CURRENT_TIMESTAMP,
+CRegisterNumber INTEGER NOT NULL,
+Work VARCHAR(225),
+Hours INTEGER,
+CONSTRAINT CRUISE_SERVICES_PK PRIMARY KEY(Date,CRegisterNumber),
+CONSTRAINT CRUISE_SERVICES_FK FOREIGN KEY(CRegisterNumber) REFERENCES CRUISE_BOAT(CRegisterNumber));
+
+INSERT INTO CRUISE_SERVICES(Work,Hours,CRegisterNumber)
+ VALUES ('cleaning',5,2),
+        ('renovation',10,3),
+        ('checking',15,4);
+
+--#6 creating TABLE CRUISE TYPE and inserting values
+
+create table CRUISE_TYPE(Model Varchar(225) NOT NULL,
+Capacity INTEGER,
+Weight INTEGER,
+CRegisterNumber INTEGER,
+UNIQUE(Model),
+CONSTRAINT CRUISE_TYPE_PK PRIMARY KEY(Model),
+CONSTRAINT CRUISE_TYPE_FK FOREIGN KEY(CRegisterNumber) REFERENCES CRUISE_BOAT(CRegisterNumber));
+
+INSERT INTO CRUISE_TYPE(Model,Capacity,Weight,CRegisterNumber)
+ VALUES ('xwx',500,2000,2),
+        ('sss',1100,3000,2),
+        ('iwi',1500,4000,3);
+
+--#7 creating TABLE EMPLOYEE and inserting values
+
+create table EMPLOYEE(EmployeeID INTEGER NOT NULL,
+Salary INTEGER,
+Shift CHAR(10),
+CONSTRAINT EMPLOYEE_PK PRIMARY KEY(EmployeeID));
+
+INSERT INTO EMPLOYEE(EmployeeID,Salary,Shift)
+ VALUES (8970,5000,'Night'),
+        (5608,1700,'Day'),
+        (7709,1900,'Day');
+
+--#8 creating TABLE EMPLOYEE SKILL and inserting values
+
+create table EMPLOYEE_SKILL(EmployeeID INTEGER NOT NULL,
+Skill VARCHAR(225) NOT NULL,
+CONSTRAINT EMPLOYEE_SKILL_PK PRIMARY KEY(EmployeeID,Skill),
+CONSTRAINT EMPLOYEE_SKILL_FK FOREIGN KEY(EmployeeID) REFERENCES EMPLOYEE(EmployeeID));
+
+INSERT INTO EMPLOYEE_SKILL(Skill,EmployeeID)
+ VALUES ('Singer',8970),
+        ('problem solving',5608),
+        ('managing',5608);
+
+--#9 creating TABLE MAINTAIN and inserting values
+
+create table MAINTAIN(EmployeeID INTEGER NOT NULL,
+Date datetime default CURRENT_TIMESTAMP,
+CONSTRAINT MAINTAIN_PK PRIMARY KEY(EmployeeID,Date),
+CONSTRAINT MAINTAIN_FK1 FOREIGN KEY(EmployeeID) REFERENCES EMPLOYEE(EmployeeID),
+CONSTRAINT CRUISE_SERVICES_FK2 FOREIGN KEY(Date) REFERENCES CRUISE_SERVICES(Date));
+
+--#10 creating TABLE WORKS ON and inserting values
+
+create table WORKS_ON(Model Varchar(225) NOT NULL,
+EmployeeID INTEGER NOT NULL,
+CONSTRAINT WORKS_ON_PK PRIMARY KEY(Model,EmployeeID),
+CONSTRAINT WORKS_ON_FK1 FOREIGN KEY(Model) REFERENCES CRUISE_TYPE(Model),
+CONSTRAINT WORKS_ON_FK2 FOREIGN KEY(EmployeeID) REFERENCES EMPLOYEE(EmployeeID));       
+
+INSERT INTO WORKS_ON(Model,EmployeeID)
+VALUES ('iwi',8970),
+       ('sss',5608),
+       ('sss',8970);
+
+--#11 creating TABLE OWNER and inserting values
+
+create table OWNER(FName VARCHAR(225) NOT NULL,
+LName VARCHAR(225) NOT NULL,
+Street CHAR(25),
+Pin INTEGER,
+AreaCode INTEGER,
+LocalNUM INTEGER,
+OWNER_type CHAR(21) CHECK (OWNER_type IN ('CORPORATION','PERSON')),
+CONSTRAINT OWNER_PK PRIMARY KEY(FName,LName));
+
+INSERT INTO OWNER(FName,LName,Street,Pin,AreaCode,LocalNum,Owner_Type)
+VALUES ('Sri','Chiti','Ptsberg',6072,91,950267541,'CORPORATION'),
+       ('Lil','Chey','lukki',8972,92,900268541,'CORPORATION'),
+       ('poitt','pit','mary',0022,21,150268513,'PERSON');
+
+--#12 creating TABLE OWNER and inserting values
+
+create table OWNS(Pdate DATE NOT NULL,
+Model Varchar(225),
+FName VARCHAR(225),
+LName VARCHAR(225),
+CONSTRAINT OWNS_PK PRIMARY KEY(Pdate),
+CONSTRAINT OWNS_FK1 FOREIGN KEY(Model) REFERENCES CRUISE_TYPE(Model),
+CONSTRAINT OWNS_FK2 FOREIGN KEY(FName,LName) REFERENCES OWNER(FName,LName));
+
+INSERT INTO OWNS(Pdate)
+VALUES ('2000-01-20'),
+       ('1999-02-16'),
+       ('2010-08-04');
+
+
+--#13 creating TABLE CORPORATION and inserting values
+
+create table CORPORATION(CFName VARCHAR(225) NOT NULL,
+CLName VARCHAR(225) NOT NULL,
+CompanyID INTEGER,
+CONSTRAINT CORPORATION_PK PRIMARY KEY(CFName,CLName),
+CONSTRAINT CORPORATION_FK FOREIGN KEY(CFName,CLName) REFERENCES OWNER(FName,LName));
+
+INSERT INTO CORPORATION(CFName,CLName)
+select FName,LName From OWNER;
+
+--#14 creating TABLE CORPORATION and inserting values
+
+create table PERSON(PFName VARCHAR(225) NOT NULL,
+PLName VARCHAR(225) NOT NULL,
+SSN INTEGER,
+CONSTRAINT PERSON_PK PRIMARY KEY(PFName,PLName),
+CONSTRAINT PERSON_FK FOREIGN KEY(PFName,PLName) REFERENCES OWNER(FName,LName));  
+
+INSERT INTO PERSON(PFName,PLName,SSN)
+VALUES ('Sri','Chiti',999123),
+    ('Lil','Chey',456789),
+    ('poitt','pit',987654);
