@@ -9,7 +9,7 @@ Project on boat database using SQL with detail business rules, EER and normaliza
 
 
 
-<img src="https://vizboat.com/wp-content/themes/yootheme/cache/440RS-chrome-black-361f94fb.jpeg" align="right"
+<img src="https://cobaltboats.com/wp-content/uploads/2021/11/R4Surf_SimilarModels.png" align="right"
      alt="Size Limit logo by Anton Lovchikov" width="500" height="300">
 
 ## Business Rules of BOAT Database
